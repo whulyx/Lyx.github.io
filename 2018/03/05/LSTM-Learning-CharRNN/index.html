@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/03/05/LSTM-Learning-CharRNN/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="&amp;emsp;&amp;emsp;本次学习的源码来自hzy46/Char-RNN-TensorFlow，利用LSTM神经网络来实验文本的生成，如诗歌、小说和代码等。 &amp;emsp;&amp;emsp;因为之前并没有写过神经网络的代码，只是对一些模型有基础的了解，所以本文仅起到记录作用，并不保证内容的正确性，之后也会根据知识的积累来对本文的纰漏之处进行修正。 model.py&amp;emsp;&amp;emsp;首先是CharRNN">
-<meta property="og:updated_time" content="2018-03-05T06:36:34.100Z">
+<meta property="og:updated_time" content="2018-03-05T06:38:13.101Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LSTM-Learning-CharRNN-1">
 <meta name="twitter:description" content="&amp;emsp;&amp;emsp;本次学习的源码来自hzy46/Char-RNN-TensorFlow，利用LSTM神经网络来实验文本的生成，如诗歌、小说和代码等。 &amp;emsp;&amp;emsp;因为之前并没有写过神经网络的代码，只是对一些模型有基础的了解，所以本文仅起到记录作用，并不保证内容的正确性，之后也会根据知识的积累来对本文的纰漏之处进行修正。 model.py&amp;emsp;&amp;emsp;首先是CharRNN">
@@ -88,7 +88,7 @@
       
         <p>&emsp;&emsp;本次学习的源码来自<a href="https://github.com/hzy46/Char-RNN-TensorFlow.git" target="_blank" rel="noopener">hzy46/Char-RNN-TensorFlow</a>，利用LSTM神经网络来实验文本的生成，如诗歌、小说和代码等。</p>
 <p>&emsp;&emsp;因为之前并没有写过神经网络的代码，只是对一些模型有基础的了解，所以本文仅起到记录作用，并不保证内容的正确性，之后也会根据知识的积累来对本文的纰漏之处进行修正。</p>
-<h2 id="model-py"><a href="#model-py" class="headerlink" title="model.py"></a>model.py</h2><p>&emsp;&emsp;首先是CharRNN模型初始化需要的参数：<br>| 参数名 | 含义 |<br>| :—–: | :—–: |<br>| num_classes | 类的数量？姑且理解为文本分类的数量 |<br>| num_seqs | 一个batch中文本序列的数量 |<br>| num_steps | 一个文本序列的长度 |<br>| lstm_size | lstm模型中hidden state的数量 |<br>| num_layers | 隐藏层数 |<br>| learning_rate | 学习率，梯度下降中使用？ |<br>| grad_clip | 用于控制梯度膨胀，如果梯度向量的L2模超过grad_clip，则等比例缩小 |<br>| sampling | 用于控制train/sample的bool值 |<br>| train_keep_prob | 用于dropout，每批数据输入时神经网络中的每个单元会以1-keep_prob的概率不工作，可以防止过拟合(同layer间不进行dropout) |<br>| use_embedding | 是否添加embedding层，用于one_hot维度缩减？ |<br>| embedding_size | embedding层的列数大小 |</p>
+<h2 id="model-py"><a href="#model-py" class="headerlink" title="model.py"></a>model.py</h2><p>&emsp;&emsp;首先是CharRNN模型初始化需要的参数：<br>| 参数名 | 含义 |<br>|:—–:|:—–:|<br>| num_classes | 类的数量？姑且理解为文本分类的数量 |<br>| num_seqs | 一个batch中文本序列的数量 |<br>| num_steps | 一个文本序列的长度 |<br>| lstm_size | lstm模型中hidden state的数量 |<br>| num_layers | 隐藏层数 |<br>| learning_rate | 学习率，梯度下降中使用？ |<br>| grad_clip | 用于控制梯度膨胀，如果梯度向量的L2模超过grad_clip，则等比例缩小 |<br>| sampling | 用于控制train/sample的bool值 |<br>| train_keep_prob | 用于dropout，每批数据输入时神经网络中的每个单元会以1-keep_prob的概率不工作，可以防止过拟合(同layer间不进行dropout) |<br>| use_embedding | 是否添加embedding层，用于one_hot维度缩减？ |<br>| embedding_size | embedding层的列数大小 |</p>
 <p>&emsp;&emsp;在<strong>init</strong>函数的最后，分别调用了：</p>
 <pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">self.build_inputs()</span><br><span class="line">self.build_lstm()</span><br><span class="line">self.build_loss()</span><br><span class="line">self.build_optimizer()</span><br><span class="line">self.saver = tf.train.Saver()</span><br></pre></td></tr></table></figure>
 </code></pre><p>&emsp;&emsp;<strong>build_inputs()</strong></p>
